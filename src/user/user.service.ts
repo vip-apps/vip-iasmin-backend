@@ -3,6 +3,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { LoginDto } from '../auth/dto/login.dto';
 
 @Injectable()
 export class UserService {
@@ -13,6 +14,14 @@ export class UserService {
 
   findAll() {
     return this.usersRepository.find();
+  }
+
+  async create(loginDto: LoginDto) {
+    const userExists = await this.findByEmail(loginDto.email);
+    if (userExists) {
+      throw new HttpException('Email ja cadastrado', HttpStatus.BAD_REQUEST);
+    }
+    return this.usersRepository.save(loginDto);
   }
 
   async findOne(id: number) {

@@ -70,7 +70,13 @@ export class AuthService {
         },
       ],
     });
-    return await this.cognitoClient.send(command);
+    try {
+      await this.cognitoClient.send(command);
+      return this.userService.create(loginDto);
+    }
+    catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async confirmSignUpUserAwsCognito(confirmSignInDto: ConfirmSignInDto) {

@@ -14,6 +14,9 @@ export class User {
     @Column({ unique: true })
     readonly email: string;
 
+    @Column({name: 'is_verified', default: false})
+    readonly isVerified: boolean;
+
     @CreateDateColumn({ name: 'created_at' })
     readonly createdAt: Date;
 
