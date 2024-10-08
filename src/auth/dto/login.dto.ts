@@ -3,13 +3,13 @@
  * Date: 9/27/24
  */
 
-import { IsEmail, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumberString } from 'class-validator';
 
 export class LoginDto {
     @IsNotEmpty({ message: 'Nome deve ser informado' })
     name: string;
 
-    @IsNumber({ allowNaN: false, allowInfinity: false }, { message: 'Identificacao de controle deve ser um numero' })
+    @IsNumberString({ no_symbols: true }, { message: 'Identificacao de controle deve ser um numero' })
     readonly controlNumber: number;
 
     @IsEmail({}, { message: 'Email invalido' })

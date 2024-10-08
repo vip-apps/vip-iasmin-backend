@@ -14,7 +14,8 @@ export class AuthController {
 
   @Post('create')
   createUserAwsCognito(@Body() loginDto: LoginDto) {
-    return this.authService.createUserAwsCognito(loginDto);
+    // return this.authService.createUserAwsCognito(loginDto);
+    return loginDto
   }
 
   @Post('confirm')
