@@ -42,6 +42,12 @@ export class UserService {
     return this.usersRepository.findOne({ where: { id } });
   }
 
+  async emailValidated(email: string) {
+    const user = await this.usersRepository.findOne({ where: { email } });
+    if (!user) return
+    await this.usersRepository.update(user.id, { isVerified: true });
+  }
+
   async remove(id: number) {
     await this.findOne(id);
     return this.usersRepository.delete(id);
@@ -55,7 +61,10 @@ export class UserService {
       .getMany();
 
     if (users.length === 0) {
-      throw new HttpException('Nenhum usuario encontrado', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'Nenhum usuario encontrado',
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     return users;

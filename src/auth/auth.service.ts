@@ -88,7 +88,14 @@ export class AuthService {
       ConfirmationCode: confirmSignInDto.confirmationCode,
     });
 
-    return await this.cognitoClient.send(command);
+    try {
+      await this.cognitoClient.send(command);
+      await this.userService.emailValidated(confirmSignInDto.email);
+    }catch (error) {
+      console.error('Erro ao confirmar codigo de verificacao: ', error.message);
+      throw new HttpException(`Codigo invalido ${error.message}`, HttpStatus.BAD_REQUEST);
+    }
+    return { message: 'Usuario confirmado com sucesso' };
   }
 
   private getSecretHash(username: string) {
