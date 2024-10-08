@@ -5,7 +5,7 @@
 
 import { IsEmail, IsNotEmpty, IsNumberString } from 'class-validator';
 
-export class LoginDto {
+export class CreateUserDto {
     @IsNotEmpty({ message: 'Nome deve ser informado' })
     name: string;
 

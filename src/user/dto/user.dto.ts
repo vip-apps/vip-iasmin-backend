@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 
-export class CreateUserDto {
+export class UserDto {
    @IsNotEmpty({ message: 'nome obrigatorio' })
    readonly name: string;
 

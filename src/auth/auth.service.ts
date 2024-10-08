@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { LoginDto } from './dto/login.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import {
@@ -7,7 +7,7 @@ import {
   SignUpCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { ConfigService } from '@nestjs/config';
-import { ConfirmSignInDto } from './dto/ConfirmSignIn.dto';
+import { ConfirmSignInDto } from './dto/confirm-signIn.dto';
 import * as crypto from 'crypto';
 
 @Injectable()
@@ -24,7 +24,8 @@ export class AuthService {
   private readonly COGNITO_CLIENT_ID = this.configService.get('AWS_COGNITO_USER_POOL_CLIENT_ID')
   private readonly COGNITO_CLIENT_SECRET = this.configService.get('AWS_COGNITO_USER_POOL_CLIENT_SECRET')
 
-  async login(loginDto: LoginDto) {
+
+  async login(loginDto: CreateUserDto) {
     const command = new InitiateAuthCommand({
       ClientId: this.COGNITO_CLIENT_ID,
       AuthFlow: 'USER_PASSWORD_AUTH',
@@ -49,7 +50,7 @@ export class AuthService {
     }
   }
 
-  async createUserAwsCognito(loginDto: LoginDto) {
+  async createUserAwsCognito(loginDto: CreateUserDto) {
     const command = new SignUpCommand({
       ClientId: this.COGNITO_CLIENT_ID,
       SecretHash: this.getSecretHash(loginDto.email),
