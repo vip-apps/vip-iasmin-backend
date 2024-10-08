@@ -71,8 +71,9 @@ export class AuthService {
       ],
     });
     try {
+      await this.userService.create(loginDto);
       await this.cognitoClient.send(command);
-      return this.userService.create(loginDto);
+      return { message: 'Usuario criado com sucesso' };
     }
     catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
