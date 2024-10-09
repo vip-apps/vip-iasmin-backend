@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
@@ -9,6 +9,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { ConfirmSignInDto } from './dto/confirm-signIn.dto';
 import * as crypto from 'crypto';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -25,7 +26,14 @@ export class AuthService {
   private readonly COGNITO_CLIENT_SECRET = this.configService.get('AWS_COGNITO_USER_POOL_CLIENT_SECRET')
 
 
-  async login(loginDto: CreateUserDto) {
+  async login(loginDto: LoginDto) {
+    const user = await this.userService.findByEmail(loginDto.email);
+    if (!user) {
+      throw new BadRequestException();
+    }
+    if (!user.isVerified) {
+      throw new HttpException('#1 Email não verificado', HttpStatus.BAD_REQUEST);
+    }
     const command = new InitiateAuthCommand({
       ClientId: this.COGNITO_CLIENT_ID,
       AuthFlow: 'USER_PASSWORD_AUTH',
