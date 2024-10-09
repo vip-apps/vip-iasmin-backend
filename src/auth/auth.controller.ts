@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, HttpStatus, HttpCode } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ConfirmSignInDto } from './dto/confirm-signIn.dto';
@@ -26,8 +26,9 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Get('validate-token')
-  validateToken() {
-    return { message: 'Token valido' };
+  @HttpCode(HttpStatus.NO_CONTENT)
+  validateToken(){
+    return;
   }
 
 }
