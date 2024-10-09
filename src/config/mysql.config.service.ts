@@ -8,13 +8,13 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class MysqlConfigService implements TypeOrmOptionsFactory {
-  constructor(private configService: ConfigService) {}
+  constructor(private readonly configService: ConfigService) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
       type: 'mysql',
       host: this.configService.get<string>('DB_HOST'),
-      port: this.configService.get<number>('DB_PORT'),
+      port: this.configService.get<number>('DB_PORT') ?? 3306,
       username: this.configService.get<string>('DB_USER') ?? 'root',
       password: this.configService.get<string>('DB_PASSWORD'),
       database: this.configService.get<string>('DB_NAME'),
