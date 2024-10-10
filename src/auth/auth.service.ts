@@ -28,9 +28,7 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const user = await this.userService.findByEmail(loginDto.email);
-    if (!user) {
-      throw new BadRequestException();
-    }
+    if (!user) throw new BadRequestException();
     if (!user.isVerified) {
       throw new HttpException('#1 Email não verificado', HttpStatus.BAD_REQUEST);
     }
